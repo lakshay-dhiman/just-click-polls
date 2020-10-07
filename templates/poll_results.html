@@ -1,0 +1,212 @@
+{% extends 'nav.html' %} {%load static%} {% block content %}
+ {% if not poll.votes %}<h1 style="font-weight: normal; text-align:center; margin-top:100px">No user voted on your poll yet, come back again soon</h1>{%endif%}
+<div class="poll_result">
+ 
+  <div class="heading">POLL Results</div>
+  <div class="poll">{{poll.poll_title}}</div>
+  <ul class="options">
+    {% for option in poll.options%}
+    <div class="wrapper">
+      <div id="percentage">
+        <div class="text"></div>
+      </div>
+      <li>{{option}}</li>
+    </div>
+    {%endfor%}
+  </ul>
+  {%if poll.votes %}
+  <div class="heading">Mored Details</div>
+  <div class="more-details">
+    <div class="total">
+      Total Votes registered : &nbsp;<span class="total-votes"></span>
+    </div>
+    <div class="votes-registered-for">Votes registered for each option</div>
+
+    <table cellspacing="0">
+      {%for option in poll.options %}
+      <tr>
+        <td class="votes-in-number"><span>{{option}}</span></td>
+        <td>:</td>
+        <td><span class="votes-number"></span></td>
+      </tr>
+      {%endfor%}
+    </table>
+  </div>
+
+  <div class="heading">Carts and Visualisation</div>
+  <div class="charts">
+    <div class="select">
+      <div class="bar active">Bar Graph</div>
+      <div class="pie">Pie Chart</div>
+    </div>
+    <div class="chart">
+      <canvas id="bar-chart"></canvas>
+      <canvas id="pie-chart"></canvas>
+    </div>
+  </div>
+  {%endif%}
+</div>
+
+<div class="votes" data-votes="{{poll.votes}}"></div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.5.1/gsap.min.js"></script>
+<script>
+  Object.size = function (obj) {
+    var size = -1,
+      key;
+    for (key in obj) {
+      if (obj.hasOwnProperty(key)) size++;
+    }
+    return size;
+  };
+  var i = 1,
+    j = 2;
+  for (var [key, value] of Object.entries(
+    $(".options").children().children()
+  )) {
+    if (key < Object.size($(".options").children().children()))
+      if (key % 2 == 0) {
+        if (key == 0) {
+          value.setAttribute("class", key);
+        } else {
+          value.setAttribute("class", key - i);
+          i++;
+        }
+      } else {
+        if (key == 1) {
+          value.setAttribute("class", key - 1);
+        } else {
+          value.setAttribute("class", key - j);
+          j++;
+        }
+      }
+  }
+  vote_initial = $(".votes").attr("data-votes");
+  if(vote_initial!='None'){
+  vote_initial = vote_initial.split("[")[1].split("]")[0].split(",");
+  vote_initial_treated = [];
+  vote_initial.forEach((data) => {
+    data = data.split('"')[0].split("'")[1];
+    vote_initial_treated.push(data);
+  });
+
+  vote_sum = 0;
+  vote_initial_treated.forEach((vote) => {
+    vote_sum = parseInt(vote_sum) + parseInt(vote);
+  });
+
+  votes = vote_initial_treated;
+  for (var i = 0; i < votes.length; i++) {
+    percent_votes = (votes[i] / vote_sum) * 100;
+    if (percent_votes == 100) {
+      $("div." + i).css("border-radius", "5px");
+    }
+    $("div." + i)
+      .children()
+      .html(Math.round(percent_votes) + "%");
+    elem = $("div." + i);
+
+    gsap.to(elem, {
+      width: Math.round(percent_votes) + "%",
+    });
+  }
+
+  var index = 0,
+    max=0;
+
+    console.log(votes)
+  votes.forEach(() => {
+    if (parseInt(votes[index]) > parseInt(votes[max])) {
+      max = index;
+    }
+ 
+    index++
+    
+  });
+
+
+  var won = document.createElement("div");
+  won.classList.add("won");
+  won.innerHTML = "WINNING";
+  $("li." + max).after(won);
+  $("li." + max)
+    .parent()
+    .css("border", "green 3px solid");
+
+  var i = 0;
+  document.querySelectorAll(".votes-number").forEach((elem) => {
+    elem.setAttribute("data-option_id", i);
+    elem.innerHTML = votes[i];
+    i++;
+  });
+
+  $(".total-votes").html(vote_sum);
+
+  votes_labels = [];
+  document.querySelectorAll("li").forEach((option) => {
+    votes_labels.push(option.innerHTML);
+  });
+
+  function show_graph(type, loc) {
+    var ctx = document.getElementById(loc);
+    var myChart = new Chart(ctx, {
+      type: type,
+      data: {
+        labels: votes_labels,
+        datasets: [
+          {
+            label: "Number of Votes",
+            data: votes,
+            backgroundColor: [
+              "#34AAFF",
+              "#0D83D8",
+              "#288DD6",
+              "#0C5D97",
+              "#2C6CE9",
+              "#34AAFF",
+              "#288DD6",
+              "#0D83D8",
+              "#0C5D97",
+              "#2C6CE9",
+            ],
+            maxBarThickness: 80,
+          },
+        ],
+      },
+      options: {
+        scales: {
+          yAxes: [
+            {
+              ticks: {
+                beginAtZero: true,
+                precision: 0,
+              },
+            },
+          ],
+        }, 
+
+      },
+    });
+  }
+
+  show_graph("bar", "bar-chart");
+  $("#pie-chart").hide();
+
+  $(".bar").click(() => {
+    $("#pie-chart").hide();
+    $("#bar-chart").show();
+    show_graph("bar", "bar-chart");
+    $(".pie").removeClass("active");
+    $(".bar").addClass("active");
+  });
+
+  $(".pie").click(() => {
+    $("#bar-chart").hide();
+    $("#pie-chart").show();
+    show_graph("pie", "pie-chart");
+    $(".bar").removeClass("active");
+    $(".pie").addClass("active");
+  });
+}
+</script>
+{%endblock%}

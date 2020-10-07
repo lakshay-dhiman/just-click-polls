@@ -1,0 +1,146 @@
+{% extends 'nav.html' %} {%load static%} {% block content %}
+<div class="register">
+  <div class="heading">REGISTER here</div>
+  <form id="register-form" method="POST">
+    {% csrf_token %}
+    <label for="username">Pick a username</label>
+    <input type="text" id="username" name="username" placeholder="Username" />
+    <div class="error-username error-text"></div>
+    <label for="password">Create a password</label>
+    <input
+      type="password"
+      id="password"
+      name="password"
+      placeholder="Password"
+    />
+    <div class="error-password error-text"></div>
+    <input type="submit" value="REGISTER" />
+
+    <div class="to-login">Been here before?<br /><b>Login</b> with username here</div>
+
+  </form> 
+        
+    <form class="to-register" action="login" method="get">  
+      {% if next%}
+      <input type="hidden" value="{{next}}" name="next"/>
+      {%endif%}
+    </form>
+</div>
+<div class="url-username-validate" data-url='{%url "username-validate"%}'></div>
+
+<script src="{%static 'js/csrf.js'%}"></script>
+<script>
+  $("body").css("background", "#B7CAFA");
+
+  $(".to-login").click(() => {
+    $(".to-register").submit();
+    console.log('to login')
+  });
+
+  url = $(".url-username-validate").attr("data-url");
+  var submit = $("input[type='submit']");
+  var not_empty;
+  var username_validated;
+  function error(type, action, message) {
+    switch (type) {
+      case "username":
+        switch (action) {
+          case "add":
+            $(".error-username").html(message);
+            $("#username").addClass("error");
+            submit.addClass("inactive");
+            break;
+
+          case "remove":
+            $(".error-username").html("");
+            $("#username").removeClass("error");
+            submit.removeClass("inactive");
+            break;
+        }
+        break;
+
+      case "password":
+        switch (action) {
+          case "add":
+            $(".error-password").html(message);
+            $("#password").addClass("error");
+            submit.addClass("inactive");
+            break;
+
+          case "remove":
+            $(".error-password").html("");
+            $("#password").removeClass("error");
+            submit.removeClass("inactive");
+            break;
+        }
+    }
+  }
+
+  function validate_username(args) {
+    var username = $("#username").val();
+    var nameRegex = /^[a-zA-Z\-_0-9]+$/;
+
+    if (!nameRegex.test(username.trim() && username != args)) {
+      error("username", "add", "Enter a valid username");
+      username_validated = false;
+    } else {
+      error("username", "remove", "");
+
+      $.ajax({
+        type: "post",
+        url: url,
+        data: { username: username },
+
+        success: (taken) => {
+          if (taken == "True") {
+            error("username", "add", "Username already taken");
+            username_validated = false;
+          } else {
+            error("username", "remove", "");
+            username_validated = true;
+          }
+        },
+      });
+    }
+  }
+
+  function check_empty() {
+    var password = $("#password").val();
+    var username = $("#username").val();
+
+    if (password != "" && username != "") {
+      error("username", "remove", "");
+      error("password", "remove", "");
+      not_empty = true;
+    } else {
+      not_empty = false;
+      if (password == "") {
+        error("password", "add", "This field cannot be empty");
+      } else if (username == "") {
+        error("pasword", "remove", "");
+      }
+
+      if (username == "") {
+        error("username", "add", "This field cannot be empty");
+      } else {
+        error("username", "remove", "");
+      }
+      submit.addClass("inactive");
+    }
+  }
+
+  $("#username").blur(() => {
+    validate_username("");
+  });
+
+  submit.click((e) => {
+    e.preventDefault();
+    validate_username(null);
+    check_empty();
+    if (not_empty && username_validated) {
+      $("#register-form").submit();
+    }
+  });
+</script>
+
+{%endblock%}

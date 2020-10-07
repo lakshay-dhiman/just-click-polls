@@ -1,0 +1,160 @@
+{% extends 'nav.html' %} {%load static%} {% block content %}
+
+<div class="voted" data-voted="{{already_voted}}"></div>
+<div class="single-poll">
+
+  <h1 class="already_voted"></h1>
+
+  <div class="poll">{{poll.poll_title}}</div>
+
+  <ul class="options">
+    {% for option in poll.options%}
+    <div class="wrapper">
+      <div id="percentage">
+        <div class="text"></div>
+      </div>
+      <li class="option">{{option}}</li>
+    </div>
+    {%endfor%}
+  </ul>
+
+  <button class="submit">Submit</button>
+</div>
+
+<div class="votes" data-votes="{{poll.votes}}"></div>
+<div class="location" data-url='{%url "vote_up"%}'></div>
+<div class="poll-id" data-id="{{poll.id}}"></div>
+
+<script src="{%static 'js/csrf.js'%}"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.5.1/gsap.min.js"></script>
+<script>
+  var option_chosen = false;
+  var url = $(".location").attr("data-url");
+  var poll_id = $(".poll-id").attr("data-id");
+  Object.size = function (obj) {
+    var size = -1,
+      key;
+    for (key in obj) {
+      if (obj.hasOwnProperty(key)) size++;
+    }
+    return size;
+  };
+
+  console.log($(".options").children());
+
+  var i = 1,
+    j = 2;
+  for (var [key, value] of Object.entries(
+    $(".options").children().children()
+  )) {
+    if (key < Object.size($(".options").children().children()))
+      if (key % 2 == 0) {
+        if (key == 0) {
+          value.setAttribute("data-option_id", key);
+        } else {
+          value.setAttribute("data-option_id", key - i);
+          i++;
+        }
+      } else {
+        if (key == 1) {
+          value.setAttribute("data-option_id", key - 1);
+        } else {
+          value.setAttribute("data-option_id", key - j);
+          j++;
+        }
+      }
+  }
+
+  vote_initial = $(".votes").attr("data-votes");
+  vote_initial = vote_initial.split("[")[1].split("]")[0].split(",");
+  vote_initial_treated = [];
+
+  vote_initial.forEach((data) => {
+    data = data.split('"')[0].split("'")[1];
+    vote_initial_treated.push(data);
+  });
+
+  if ($(".voted").attr("data-voted") == "True") {
+    vote_sum = 0;
+    vote_initial_treated.forEach((vote) => {
+      vote_sum = parseInt(vote_sum) + parseInt(vote);
+    });
+    votes = vote_initial_treated;
+    for (var i = 0; i < votes.length; i++) {
+      percent_votes = (votes[i] / vote_sum) * 100;
+      if (percent_votes == 100) {
+        $("div[data-option_id=" + i + "]").css("border-radius", "5px");
+      }
+      $("div[data-option_id=" + i + "]")
+        .children()
+        .html(Math.round(percent_votes) + "%");
+      elem = $("div[data-option_id=" + i + "]");
+
+      gsap.to(elem, {
+        width: Math.round(percent_votes) + "%",
+      });
+    }
+
+    $(".submit").html('VOTED');
+    $('.submit').css('color','green')
+    $('.already_voted').html('YOu have already voted for this POLL')
+
+  } else {
+    option_chosen = null;
+
+    $(".option").click((e) => {
+      option_chosen = $(e.target).attr("data-option_id");
+      $(".option").parent().removeClass("active");
+      $(e.target).parent().addClass("active");
+    });
+
+    $(".submit").click(() => {
+      if (option_chosen != null) {
+        vote_initial_treated[option_chosen]++;
+        for (var i = 0; i < vote_initial_treated.length; i++) {
+          vote_initial_treated[i] = vote_initial_treated[i].toString();
+        }
+
+        console.log(option_chosen);
+
+        $.ajax({
+          type: "post",
+          url: url,
+          data: {
+            votes: JSON.stringify(vote_initial_treated),
+            poll_id: poll_id,
+            option_chosen: option_chosen,
+          },
+          dataType: "json",
+
+          success: (votes) => {
+            vote_sum = 0;
+            votes.forEach((vote) => {
+              vote_sum = parseInt(vote_sum) + parseInt(vote);
+            });
+            for (var i = 0; i < votes.length; i++) {
+              percent_votes = (votes[i] / vote_sum) * 100;
+              if (percent_votes == 100) {
+                $("div[data-option_id=" + i + "]").css("border-radius", "5px");
+              }
+              $("div[data-option_id=" + i + "]")
+                .children()
+                .html(Math.round(percent_votes) + "%");
+              elem = $("div[data-option_id=" + i + "]");
+
+              gsap.to(elem, {
+                width: Math.round(percent_votes) + "%",
+              });
+
+              $('.submit').html('voted');
+              $('.submit').css('color','green');
+              $('.already_voted').html('Thanku for Voting in POLL')
+            }
+          },
+        });
+      }
+    });
+  }
+</script>
+
+{%endblock%}

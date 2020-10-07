@@ -1,0 +1,26 @@
+{% extends 'nav.html' %} {%load static%} {% block content %}
+
+<div class="hero">
+  <div class="background">
+    <img src="{%static 'files/Bar-graph.svg' %}" alt="background" />
+  </div>
+  <div class="hero-title">CREATE POLLS</div>
+  <div class="hero-subtitle">BECAUSE WHAT OTHERS THINK MATTERS</div>
+  <div class="hero-buttons">
+    <button data-url="{% url 'display-polls'%}">Participate in a Poll</button>
+    <button data-url="{% url 'create-poll' %}">Create a Poll</button>
+  </div>
+</div>
+
+<script>
+  $(window).click((e) => {
+    var loc = $(e.target).attr("data-url");
+
+    if (loc) {
+      window.location = loc;
+    }
+  });
+
+  $('body').css('background','#B7CAFA')
+</script>  
+{% endblock %}

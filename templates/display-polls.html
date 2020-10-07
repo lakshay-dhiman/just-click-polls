@@ -1,0 +1,56 @@
+{% extends 'nav.html' %} {%load static%} {% block content %}
+
+{% if not all_polls %}
+<div class="not_found">
+  <h1>Nothing here yet</h1>
+  <img src="{%static 'files/not_found.svg'%}" alt="not_found">
+</div>
+{%else%}
+
+{%for poll in voted%}
+<div class="already_voted" data-poll="{{poll.poll}}"></div>
+{%endfor%}
+
+<div class="available-polls">
+  <div class="heading">Available POLLS</div>
+  <div class="polls">
+  {%for poll in all_polls%}
+  <div class="poll-block" data-postid="{{poll.id}}">
+    <div class="by" data-postid="{{poll.id}}">by:- @{{poll.user}}<span class="voted">VOTED</span></div>
+    <p data-postid="{{poll.id}}">{{poll.poll_title}}</p>
+    <div class="created" data-postid="{{poll.id}}">{{poll.time_created}}</div>
+    <div class="url" data-url="{%url 'single_poll' %}"></div>
+    <form action="{%url 'single_poll'%}" id="{{poll.id}}" method="get">
+        <input type="hidden" value="{{poll.id}}" name="id">
+    </form>
+  </div>
+  {%endfor%}
+  </div>
+</div>
+
+
+
+<script>
+  voted_by_user = []
+  document.querySelectorAll('.already_voted').forEach((element)=>{
+    voted_by_user.push(element.getAttribute('data-poll'))
+  })
+
+  console.log(voted_by_user)
+
+  document.querySelectorAll('.poll-block').forEach((element)=>{
+    if(voted_by_user.includes(element.getAttribute('data-postid'))){
+      element.classList.add('already-voted')
+    }
+  })
+
+  $(".poll-block").click((e) => {
+    var post_id = $(e.target).attr("data-postid");
+    $("#"+post_id).submit()
+
+  });
+
+</script>
+{%endif%}
+
+{%endblock%}

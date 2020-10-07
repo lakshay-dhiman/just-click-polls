@@ -1,0 +1,129 @@
+{% extends 'nav.html' %} {%load static%} {% block content %}
+
+<div class="login">
+  <div class="heading">LOGIN here</div>
+  <form id="login-form" method="POST">
+    {% csrf_token %}
+    <label for="username">Enter your username</label>
+    <input type="text" id="username" name="username" placeholder="Username" />
+    <div class="error-username error-text">
+      {%if messages%} {%for message in messages%} {%if 'username-error' in message.tags%} {{message}} {%endif%} {%endfor%} {%endif%}
+    </div>
+    <label for="password">Enter your password</label>
+    <input
+      type="password"
+      id="password"
+      name="password"
+      placeholder="Password"
+    />
+    <div class="error-password error-text">
+      {%if messages%} {%for message in messages%} {%if 'password-error' in message.tags%} {{message}} {%endif%} {%endfor%} {%endif%}
+    </div>
+    <input type="submit" value="LOGIN" />
+    <a class="to-login"
+      >Been here for first time ?<br /><b>Register</b> instantly here</a
+    >
+  </form>
+  <form class="to-register" action="register" method="get">
+    {%if next %}
+    <input type="hidden" value="{{next}}" name="next" />
+    {% endif %}
+  </form>
+</div>
+
+<script>
+  $(".to-login").click(() => {
+    $(".to-register").submit();
+  });
+  $("body").css("background", "#B7CAFA");
+  var submit = $("input[type='submit']");
+  var not_empty, username_validated;
+
+  function error(type, action, message) {
+    switch (type) {
+      case "username":
+        switch (action) {
+          case "add":
+            $(".error-username").html(message);
+            $("#username").addClass("error");
+            submit.addClass("inactive");
+            break;
+
+          case "remove":
+            $(".error-username").html("");
+            $("#username").removeClass("error");
+            submit.removeClass("inactive");
+            break;
+        }
+        break;
+
+      case "password":
+        switch (action) {
+          case "add":
+            $(".error-password").html(message);
+            $("#password").addClass("error");
+            submit.addClass("inactive");
+            break;
+
+          case "remove":
+            $(".error-password").html("");
+            $("#password").removeClass("error");
+            submit.removeClass("inactive");
+            break;
+        }
+    }
+  }
+
+  function validate_username(args) {
+    var username = $("#username").val();
+    var nameRegex = /^[a-zA-Z\-_0-9]+$/;
+
+    if (!nameRegex.test(username.trim()) && username != args) {
+      error("username", "add", "Enter a valid username");
+      username_validated = false;
+    } else {
+      error("username", "remove", "");
+      username_validated = true;
+    }
+  }
+
+  function check_empty() {
+    var password = $("#password").val();
+    var username = $("#username").val();
+
+    if (password != "" && username != "") {
+      error("username", "remove", "");
+      error("password", "remove", "");
+      not_empty = true;
+    } else {
+      not_empty = false;
+      if (password == "") {
+        error("password", "add", "This field cannot be empty");
+      } else if (username == "") {
+        error("pasword", "remove", "");
+      }
+
+      if (username == "") {
+        error("username", "add", "This field cannot be empty");
+      } else {
+        error("username", "remove", "");
+      }
+      submit.addClass("inactive");
+    }
+  }
+
+  $("#username").blur(() => {
+    validate_username("");
+  });
+
+  submit.click((e) => {
+    e.preventDefault();
+    check_empty();
+    validate_username(null);
+    if (not_empty && username_validated) {
+      $("#login-form").submit();
+    }
+  });
+</script>
+
+{%endblock%}

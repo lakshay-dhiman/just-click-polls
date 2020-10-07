@@ -1,0 +1,60 @@
+{% extends 'nav.html' %} {%load static%} {% block content %} {% if not user_polls %}
+<div class="not_found">
+  <h1>
+    Nothing here yet, &nbsp;<a href="{%url 'create-poll'%}">
+      Create your first poll</a
+    >
+  </h1>
+  <img src="{%static 'files/not_found.svg'%}" alt="not_found" />
+</div>
+{%else%}
+
+<div class="your_polls">
+  <div class="heading">Your POLLS</div>
+  <div class="polls">
+    {%for poll in user_polls%}
+    <div class="poll-block" data-postid="{{poll.id}}">
+      <p data-postid="{{poll.id}}">{{poll.poll_title}}</p>
+      <div class="created" data-postid="{{poll.id}}">{{poll.time_created}}</div>
+      <div class="remove delete">
+        <a><i class="fas fa-trash-alt delete" data-postid="{{poll.id}}"></i></a>
+        <form action="delete-poll" method="POST" id="delete-form_{{poll.id}}">{%csrf_token%}
+            <input type="hidden" value="{{poll.id}} " name="id">
+        </form>
+      </div>
+    </div>
+
+    <form action="{%url 'poll_results'%}" id="{{poll.id}}" method="get">
+      <input type="hidden" value="{{poll.id}}" name="id" />
+    </form>
+
+    {%endfor%}
+  </div>
+</div>
+
+<script>
+  $(".poll-block").click((e) => {
+    var post_id = $(e.target).attr("data-postid");
+
+    console.log($(e.target))
+    if($(e.target).hasClass('delete')){
+
+        var confirmed = window.confirm('Are you sure you want to delete this poll')
+
+        if(confirmed){
+            $('#delete-form_'+post_id).submit();
+            console.log('submit')            
+        }
+
+    }
+    else{
+        $("#" + post_id).submit();
+        console.log("done");        
+    }
+
+
+
+  });
+
+</script>
+{%endif%} {%endblock%}
