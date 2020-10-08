@@ -26,11 +26,13 @@ nav {
       -ms-flex-pack: justify;
           justify-content: space-between;
   background: var(--light-background);
-  -webkit-filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
-          filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
+  -webkit-box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.25);
+          box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.25);
 }
 
-.nav-right {
+.nav-right,
+.nav-right-small,
+.flex {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -40,7 +42,9 @@ nav {
   margin: auto 100px;
 }
 
-.nav-right a {
+.nav-right a,
+.nav-right-small a,
+.flex a {
   color: var(--dark-text);
   text-decoration: none;
   font-family: var(--squada-one);
@@ -48,8 +52,14 @@ nav {
   margin: auto 50px;
 }
 
-.nav-right a.yellow {
+.nav-right a.yellow,
+.nav-right-small a.yellow,
+.flex a.yellow {
   color: var(--blue-accent);
+}
+
+.nav-right-small {
+  display: none;
 }
 
 .nav-left {
@@ -113,10 +123,10 @@ nav {
   border: none;
   border-radius: 10px;
   min-width: 300px;
-  -webkit-filter: drop-shadow(-4px -2px 8px rgba(0, 0, 0, 0.25));
-          filter: drop-shadow(-4px -2px 8px rgba(0, 0, 0, 0.25));
-  -webkit-filter: drop-shadow(4px 2px 8px rgba(0, 0, 0, 0.25));
-          filter: drop-shadow(4px 2px 8px rgba(0, 0, 0, 0.25));
+  -webkit-box-shadow: -4px -2px 8px rgba(0, 0, 0, 0.25);
+          box-shadow: -4px -2px 8px rgba(0, 0, 0, 0.25);
+  -webkit-box-shadow: 4px 2px 8px rgba(0, 0, 0, 0.25);
+          box-shadow: 4px 2px 8px rgba(0, 0, 0, 0.25);
 }
 
 .hero .hero-buttons button:hover {
@@ -295,8 +305,8 @@ nav {
   font-size: 4em;
   padding: 20px 50px;
   background: var(--purple-accent);
-  -webkit-filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
-          filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
+  -webkit-box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+          box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
 }
 
 .register form,
@@ -389,6 +399,13 @@ nav {
   color: #a6a6a6 !important;
 }
 
+.register .to-register,
+.login .to-register {
+  width: 0px;
+  margin: 0px;
+  height: 0px;
+}
+
 .available-polls,
 .your_polls,
 .poll-creation,
@@ -420,8 +437,9 @@ nav {
   padding: 25px 50px;
   border-top-left-radius: 5px;
   border-top-right-radius: 5px;
-  -webkit-filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
-          filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
+  -webkit-box-shadow: 4px 4px 4px rgba(0, 0, 0, 0.25);
+          box-shadow: 4px 4px 4px rgba(0, 0, 0, 0.25);
+  z-index: 2;
 }
 
 .available-polls .polls,
@@ -436,6 +454,7 @@ nav {
       -ms-flex-direction: column-reverse;
           flex-direction: column-reverse;
   width: 100%;
+  z-index: 1;
 }
 
 .available-polls .poll-block,
@@ -523,6 +542,36 @@ nav {
   padding: 3px 5px;
   margin-right: 20px;
   font-size: 0.7em;
+}
+
+.your_polls .polls {
+  position: relative;
+}
+
+.your_polls .polls .poll-block {
+  position: relative;
+}
+
+.your_polls .polls .poll-block p {
+  margin-top: 30px;
+}
+
+.your_polls .polls .remove {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+}
+
+.your_polls .polls .remove i {
+  color: var(--blue-accent);
+  padding: 8px;
+  border-radius: 4px;
+}
+
+.your_polls .polls .remove i:hover {
+  background: rgba(42, 46, 68, 0.096);
+  -webkit-transition: .2s;
+  transition: .2s;
 }
 
 .poll_result {
@@ -770,9 +819,448 @@ nav {
   color: var(--dark-text);
 }
 
-@media (max-width: 1 500px) {
+.hamburger {
+  color: var(--blue-accent);
+  font-size: 1.8em;
+  display: none;
+}
+
+.visible-flex {
+  display: -webkit-box !important;
+  display: -ms-flexbox !important;
+  display: flex !important;
+}
+
+.flex {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  width: 100%;
+  height: 80%;
+  margin: auto;
+  margin-top: 100px;
+}
+
+.overlay-darken {
+  position: absolute;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 5;
+  display: none;
+}
+
+.overlay {
+  position: absolute;
+  height: 100vh;
+  top: 0px;
+  right: -100%;
+  width: 70vw;
+  background: black;
+  margin: 0px;
+  z-index: 1000;
+  display: none;
+}
+
+.overlay .cross-overlay {
+  color: #b7cafa;
+  font-size: 2em;
+  position: absolute;
+  top: 20px;
+  right: 20px;
+}
+
+.overlay .user-interaction {
+  padding: 20px;
+  border-top: 2px var(--blue-accent) solid;
+  border-bottom: 2px var(--blue-accent) solid;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+}
+
+.overlay .user-interaction a {
+  width: -webkit-min-content;
+  width: -moz-min-content;
+  width: min-content;
+  margin: auto;
+  text-align: center;
+  padding: 0px 30px;
+}
+
+.overlay .user-interaction a:not(:first-child) {
+  border-left: 1px var(--blue-accent) solid;
+}
+
+.overlay .navigation {
+  margin-top: 50px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  width: 90%;
+  margin: 50px auto;
+}
+
+.overlay .navigation a {
+  padding: 30px 10px;
+  color: #b7cafa;
+  border-bottom: #b7cafa 1px solid;
+}
+
+.overlay .navigation a:last-child {
+  border-bottom: none;
+}
+
+.overlay a {
+  margin: 0px;
+}
+
+@media (max-width: 1500px) {
+  .nav-right a {
+    margin: auto 25px;
+  }
+  .register,
+  .login {
+    width: 35%;
+    margin-bottom: 100px;
+  }
+  .hero {
+    margin-top: 100px;
+  }
+  .hero .hero-title {
+    font-size: 8em;
+  }
+  .hero .hero-subtitle {
+    font-size: 2.5em;
+  }
+  .hero .hero-buttons button {
+    margin: auto 20px;
+    width: 300px;
+  }
+}
+
+@media (max-width: 1200px) {
+  .register,
+  .login {
+    width: 60%;
+  }
+  .available-polls,
+  .your_polls,
+  .poll-creation,
+  .poll_result {
+    width: 100%;
+    margin-top: 0px;
+  }
+  .poll-creation {
+    width: 100% !important;
+    border-radius: 0px;
+    margin-bottom: 0px;
+  }
+  .poll-creation .creation-form {
+    margin: 20px;
+  }
+  .poll-creation .creation-form textarea {
+    width: 90%;
+  }
+  .poll-creation .creation-form input {
+    width: 90%;
+  }
+  .poll-creation .creation-form input[type="submit"] {
+    padding-right: 20px;
+  }
+  .poll-creation .heading {
+    border-radius: 0px;
+  }
+  .single-poll,
+  .poll_result {
+    width: auto;
+    padding: 10px;
+    -webkit-box-shadow: none;
+            box-shadow: none;
+    margin-top: 0px;
+    border-radius: 0px;
+  }
+  .single-poll .options,
+  .poll_result .options {
+    width: 100%;
+  }
+  .single-poll .options .wrapper,
+  .poll_result .options .wrapper {
+    height: 30px;
+  }
+  .single-poll .already_voted,
+  .poll_result .already_voted {
+    margin-top: 30px;
+    margin-bottom: 25px;
+    font-size: 1.4em;
+  }
+  .single-poll .poll,
+  .poll_result .poll {
+    font-size: 2em;
+    margin-top: 50px;
+  }
+  .single-poll .submit,
+  .poll_result .submit {
+    margin: 0px;
+  }
+  .poll_result .poll {
+    margin-left: 20px;
+  }
+  .poll_result .options {
+    margin-top: 30px;
+    margin-left: 20px;
+    width: 90%;
+  }
+  .poll_result .won {
+    top: 0px;
+    right: auto;
+    left: 10px;
+    padding: 2px;
+  }
+  .poll_result .more-details {
+    margin-left: 20px;
+  }
+  .poll_result .more-details .total {
+    font-size: 1.9em;
+  }
+  .poll_result .more-details .total .total-votes {
+    font-size: 2em;
+  }
+  .poll_result .more-details .votes-registered-for {
+    font-size: 1.7em;
+    margin-right: 10px;
+  }
+  nav {
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+        -ms-flex-direction: column;
+            flex-direction: column;
+  }
+  nav .nav-right {
+    background: var(--dark-text);
+    width: 100vw;
+    -ms-flex-pack: distribute;
+        justify-content: space-around;
+    margin: 0px;
+    padding: 20px 0px;
+  }
+  nav .nav-right a {
+    color: var(--light-background);
+    margin: 0px 50px;
+  }
+  nav .nav-right .yellow {
+    display: none;
+  }
+  nav .nav-left {
+    margin: 10px 25px;
+  }
+  nav .nav-right-small {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    margin: auto 100px;
+  }
+  nav .nav-right-small a {
+    margin: 0px 50px;
+  }
+  nav .nav-mock {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-pack: justify;
+        -ms-flex-pack: justify;
+            justify-content: space-between;
+    width: 100%;
+  }
+}
+
+@media (max-width: 800px) {
+  .hero {
+    margin-top: 100px;
+  }
+}
+
+@media (max-width: 750px) {
+  .available-polls .heading,
+  .your_polls .heading,
+  .poll-creation .heading,
+  .poll_result .heading {
+    padding-left: 20px;
+    padding-right: 10px;
+  }
+  .available-polls .poll-block,
+  .your_polls .poll-block,
+  .poll-creation .poll-block,
+  .poll_result .poll-block {
+    padding-left: 20px;
+  }
+  .available-polls .poll-block p,
+  .your_polls .poll-block p,
+  .poll-creation .poll-block p,
+  .poll_result .poll-block p {
+    padding-right: 10px;
+  }
+  .available-polls .poll-block .by,
+  .your_polls .poll-block .by,
+  .poll-creation .poll-block .by,
+  .poll_result .poll-block .by {
+    margin-bottom: 50px;
+  }
+  .available-polls .poll-block .created,
+  .your_polls .poll-block .created,
+  .poll-creation .poll-block .created,
+  .poll_result .poll-block .created {
+    margin-top: 50px;
+  }
+  .background {
+    display: none;
+  }
+  .hero {
+    margin-top: 50px;
+  }
+  .hero .hero-buttons {
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+        -ms-flex-direction: column;
+            flex-direction: column;
+    margin-top: 50px;
+  }
+  .hero .hero-buttons button {
+    margin: 20px auto;
+    width: 60%;
+    background: transparent;
+    border: none;
+    color: var(--dark-text);
+    border-radius: 0px;
+    width: 100%;
+    margin: 0px auto;
+    padding: 25px;
+    font-size: 2em;
+    -webkit-box-shadow: none;
+            box-shadow: none;
+  }
+  .hero .hero-buttons button:first-child {
+    border-top: 2px var(--blue-accent) solid;
+  }
+  .hero .hero-buttons button:last-child {
+    border-bottom: 2px var(--blue-accent) solid;
+    border-top: 2px var(--blue-accent) solid;
+  }
+  .hero .hero-title {
+    font-size: 7em;
+  }
+  .hero .hero-subtitle {
+    font-size: 2.5em;
+  }
+}
+
+@media (max-width: 750px) {
+  .hamburger {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    margin: auto 20px;
+  }
   .nav-right {
-    width: 10vw;
+    display: none;
+  }
+  .nav-right {
+    position: absolute;
+    width: 30vw;
+    height: 100vh;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+        -ms-flex-direction: column;
+            flex-direction: column;
+    left: auto;
+    right: 0px;
+    background: black;
+    margin: 0px;
+    z-index: 50;
+  }
+  .register,
+  .login {
+    width: 75%;
+    margin-bottom: 0px;
+    margin-top: 30px;
+    margin-bottom: 30px;
+  }
+  nav {
+    -webkit-box-orient: horizontal;
+    -webkit-box-direction: normal;
+        -ms-flex-direction: row;
+            flex-direction: row;
+  }
+  nav .nav-right-small {
+    margin: auto;
+    margin-left: 0px;
+    margin-right: 20px;
+  }
+  nav .nav-right-small .hamburger {
+    display: block;
+  }
+}
+
+@media (max-width: 650px) {
+  .login-nav,
+  .logout-nav {
+    display: none !important;
+  }
+  .register,
+  .login {
+    width: 90%;
+  }
+  .register .heading,
+  .login .heading {
+    font-size: 3em;
+  }
+  .register form,
+  .login form {
+    width: 85%;
+  }
+}
+
+@media (max-width: 450px) {
+  nav .nav-left img {
+    width: 100px;
+  }
+  nav .nav-right-small a {
+    margin: auto 30px;
+  }
+}
+
+@media (max-width: 376px) {
+  .hero {
+    margin-top: 50px;
+  }
+  .hero .hero-title {
+    font-size: 5em;
+  }
+  .hero .hero-subtitle {
+    font-size: 2em;
+  }
+  .hero .hero-buttons {
+    margin-top: 50px;
+  }
+  .hero .hero-buttons button {
+    font-size: 1.5em;
+    padding: 20px;
+  }
+  .register .heading,
+  .login .heading {
+    font-size: 2em;
+    padding-left: 20px;
+  }
+  nav .nav-right-small a {
+    margin: auto 15px;
   }
 }
 /*# sourceMappingURL=style.css.map */
