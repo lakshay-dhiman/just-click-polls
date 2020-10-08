@@ -11,7 +11,6 @@ def create_poll(request):
         options = request.POST.getlist('poll_options')
         votes = request.POST.getlist('votes')
         description = request.POST['poll-description']
-        print(options)
         new_poll = Poll(poll_title=description,
                         user=request.user, options=options, votes=votes)
         new_poll.save()
@@ -53,7 +52,6 @@ def vote_up(request):
         user_vote = Uservoted(user=request.user, poll=poll,option_chosen=option_chosen)
         user_vote.save()
 
-        print(poll.votes)
         votes = json.dumps(poll.votes)
         return HttpResponse(votes)
 

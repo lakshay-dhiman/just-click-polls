@@ -18,9 +18,9 @@
 
     <div class="to-login">Been here before?<br /><b>Login</b> with username here</div>
 
-  </form> 
-        
-    <form class="to-register" action="login" method="get">  
+  </form>
+
+    <form class="to-register" action="login" method="get">
       {% if next%}
       <input type="hidden" value="{{next}}" name="next"/>
       {%endif%}
@@ -34,7 +34,6 @@
 
   $(".to-login").click(() => {
     $(".to-register").submit();
-    console.log('to login')
   });
 
   url = $(".url-username-validate").attr("data-url");

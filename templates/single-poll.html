@@ -2,7 +2,6 @@
 
 <div class="voted" data-voted="{{already_voted}}"></div>
 <div class="single-poll">
-
   <h1 class="already_voted"></h1>
 
   <div class="poll">{{poll.poll_title}}</div>
@@ -39,8 +38,6 @@
     }
     return size;
   };
-
-  console.log($(".options").children());
 
   var i = 1,
     j = 2;
@@ -95,10 +92,9 @@
       });
     }
 
-    $(".submit").html('VOTED');
-    $('.submit').css('color','green')
-    $('.already_voted').html('YOu have already voted for this POLL')
-
+    $(".submit").html("VOTED");
+    $(".submit").css("color", "green");
+    $(".already_voted").html("YOu have already voted for this POLL");
   } else {
     option_chosen = null;
 
@@ -114,8 +110,6 @@
         for (var i = 0; i < vote_initial_treated.length; i++) {
           vote_initial_treated[i] = vote_initial_treated[i].toString();
         }
-
-        console.log(option_chosen);
 
         $.ajax({
           type: "post",
@@ -146,9 +140,13 @@
                 width: Math.round(percent_votes) + "%",
               });
 
-              $('.submit').html('voted');
-              $('.submit').css('color','green');
-              $('.already_voted').html('Thanku for Voting in POLL')
+              $(".submit").html("voted");
+              $(".submit").css("color", "green");
+              $(".already_voted").html("Thanku for Voting in POLL");
+              document.querySelectorAll(".wrapper").forEach((elem) => {
+                elem.classList.remove("active");
+              });
+              $(".option").off();
             }
           },
         });

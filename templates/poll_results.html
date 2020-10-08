@@ -1,7 +1,7 @@
 {% extends 'nav.html' %} {%load static%} {% block content %}
  {% if not poll.votes %}<h1 style="font-weight: normal; text-align:center; margin-top:100px">No user voted on your poll yet, come back again soon</h1>{%endif%}
 <div class="poll_result">
- 
+
   <div class="heading">POLL Results</div>
   <div class="poll">{{poll.poll_title}}</div>
   <ul class="options">
@@ -114,14 +114,13 @@
   var index = 0,
     max=0;
 
-    console.log(votes)
   votes.forEach(() => {
     if (parseInt(votes[index]) > parseInt(votes[max])) {
       max = index;
     }
- 
+
     index++
-    
+
   });
 
 
@@ -183,7 +182,7 @@
               },
             },
           ],
-        }, 
+        },
 
       },
     });

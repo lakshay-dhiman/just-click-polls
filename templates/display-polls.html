@@ -36,7 +36,6 @@
     voted_by_user.push(element.getAttribute('data-poll'))
   })
 
-  console.log(voted_by_user)
 
   document.querySelectorAll('.poll-block').forEach((element)=>{
     if(voted_by_user.includes(element.getAttribute('data-postid'))){

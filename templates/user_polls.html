@@ -36,20 +36,17 @@
   $(".poll-block").click((e) => {
     var post_id = $(e.target).attr("data-postid");
 
-    console.log($(e.target))
     if($(e.target).hasClass('delete')){
 
         var confirmed = window.confirm('Are you sure you want to delete this poll')
 
         if(confirmed){
             $('#delete-form_'+post_id).submit();
-            console.log('submit')            
         }
 
     }
     else{
         $("#" + post_id).submit();
-        console.log("done");        
     }
 
 
