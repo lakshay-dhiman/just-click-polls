@@ -570,8 +570,8 @@ nav {
 
 .your_polls .polls .remove i:hover {
   background: rgba(42, 46, 68, 0.096);
-  -webkit-transition: .2s;
-  transition: .2s;
+  -webkit-transition: 0.2s;
+  transition: 0.2s;
 }
 
 .poll_result {
@@ -985,6 +985,7 @@ nav {
     padding: 10px;
     -webkit-box-shadow: none;
             box-shadow: none;
+    margin-top: 25px;
     margin-top: 0px;
     border-radius: 0px;
   }

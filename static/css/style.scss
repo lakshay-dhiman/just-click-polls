@@ -323,7 +323,7 @@ nav {
     color: #a6a6a6 !important;
   }
 
-  .to-register{
+  .to-register {
     width: 0px;
     margin: 0px;
     height: 0px;
@@ -416,35 +416,32 @@ nav {
   }
 }
 
-.your_polls{
-  .polls{
+.your_polls {
+  .polls {
     position: relative;
 
-    .poll-block{
+    .poll-block {
       position: relative;
 
-      p{
+      p {
         margin-top: 30px;
       }
     }
-    .remove{
+    .remove {
       position: absolute;
       top: 20px;
       right: 20px;
 
-      i{
+      i {
         color: var(--blue-accent);
         padding: 8px;
         border-radius: 4px;
 
-        &:hover{
+        &:hover {
           background: rgba(42, 46, 68, 0.096);
-          transition: .2s;
+          transition: 0.2s;
         }
-      }   
-      
-      
-         
+      }
     }
   }
 }
@@ -772,23 +769,22 @@ nav {
     margin-bottom: 100px;
   }
 
-  .hero{
+  .hero {
     margin-top: 100px;
 
-    .hero-title{
+    .hero-title {
       font-size: 8em;
     }
 
-    .hero-subtitle{
+    .hero-subtitle {
       font-size: 2.5em;
     }
 
-    .hero-buttons{
-      button{
+    .hero-buttons {
+      button {
         margin: auto 20px;
-        width: 300px;        
+        width: 300px;
       }
-
     }
   }
 }
@@ -837,6 +833,7 @@ nav {
     width: auto;
     padding: 10px;
     box-shadow: none;
+    margin-top: 25px;
 
     .options {
       width: 100%;
@@ -1116,7 +1113,6 @@ nav {
 
   .register,
   .login {
-
     .heading {
       font-size: 2em;
       padding-left: 20px;
