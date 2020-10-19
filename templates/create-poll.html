@@ -50,20 +50,56 @@
     remove.setAttribute("data-option_number", count);
     remove.innerHTML = "&#10005;";
     option_div.appendChild(remove);
-
     count++;
   });
 
   $(document).click((e) => {
     if ($(e.target).attr("id") == "cross") {
-      var option_number = $(e.target).attr("data-option_number");
-      $("#option-div[data-number = '" + option_number + "']").remove();
       count--;
+      $("#option-div[data-number = '" + count + "']").remove();
+
     }
   });
 
   $('body').css('background', '#B7CAFA')
- 
+
+
+  $('input[type="submit"]').click((e)=>{
+    e.preventDefault();
+    var poll_empty = false
+    var option_empty = false     
+    $('.error-text').remove()
+
+    for(var i=0; i<$("input[type='text']").length; i++ ){
+      var target = $("input[type='text']")[i]
+      if(target.value==""){
+        option_empty=true
+        target.classList.add('error')
+        var error = document.createElement('div');
+        error.setAttribute("class", "error-text");
+        error.innerHTML = 'This field cannot be empty'
+        target.after(error)
+        $('input[type="submit"]').addClass('inactive')        
+      }
+    }
+    if($('textarea').val()==""){
+        poll_empty=true
+        var target = $('textarea')
+        target.addClass('error')
+        var error = document.createElement('div');
+        error.setAttribute("class", "error-text");
+        error.innerHTML = 'This field cannot be empty'
+        target.after(error)
+        $('input[type="submit"]').addClass('inactive') 
+    } 
+    
+    if(!poll_empty && !option_empty){
+      $('#poll-creation').submit()
+    }
+  })
+
+
+  
 </script>
 
 {% endblock %}

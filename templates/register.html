@@ -79,7 +79,7 @@
     var username = $("#username").val();
     var nameRegex = /^[a-zA-Z\-_0-9]+$/;
 
-    if (!nameRegex.test(username.trim() && username != args)) {
+    if (!nameRegex.test(username.trim()) && username != args) {
       error("username", "add", "Enter a valid username");
       username_validated = false;
     } else {
@@ -128,7 +128,7 @@
     }
   }
 
-  $("#username").blur(() => {
+  $("input").blur(() => {
     validate_username("");
   });
 
@@ -140,6 +140,7 @@
       $("#register-form").submit();
     }
   });
-</script>
 
+
+</script>
 {%endblock%}

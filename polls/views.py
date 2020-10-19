@@ -1,4 +1,5 @@
-from django.shortcuts import render, redirect, HttpResponse
+from django.shortcuts import render, redirect
+from django.http import HttpResponse
 from .models import Poll, Uservoted
 from django.contrib.auth.models import User
 import json
@@ -69,13 +70,12 @@ def poll_results(request):
     return render(request, 'poll_results.html', {'poll': poll})
 
 
-@login_required(login_url='register')
 def username_validate(request):
     username=request.POST['username']
     if User.objects.filter(username=username).exists():
         return HttpResponse(True)
     else:
-        return HttpResponse(False)
+        return HttpResponse(False) 
 
 
 def delete_poll(request):
